@@ -1,0 +1,19 @@
+{
+	"files.associations": {
+		"random": "cpp",
+		"__verbose_abort": "cpp",
+		"cmath": "cpp",
+		"cstddef": "cpp",
+		"cstdint": "cpp",
+		"cstdlib": "cpp",
+		"initializer_list": "cpp",
+		"iosfwd": "cpp",
+		"limits": "cpp",
+		"new": "cpp",
+		"bit": "cpp",
+		"compare": "cpp",
+		"concepts": "cpp",
+		"type_traits": "cpp",
+		"utility": "cpp"
+	}
+}
