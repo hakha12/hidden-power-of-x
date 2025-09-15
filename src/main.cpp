@@ -4,6 +4,7 @@
 #include "intro.hpp"
 #include "title.hpp"
 #include "level.hpp"
+#include "shared.hpp"
 
 #if defined(PLATFORM_WEB)
 	#include <emscripten/emscripten.h>
@@ -21,7 +22,9 @@ static void UpdateDrawFrame();
 
 int main(int argc, char** argv){
     window = std::make_shared<Window>(WINDOW_WIDTH, WINDOW_HEIGHT, GAME_TITLE);
-	stateManager = std::make_shared<StateManager>();
+
+	std::shared_ptr<SharedContext> sharedContext = std::make_shared<SharedContext>(window);
+	stateManager = std::make_shared<StateManager>(sharedContext);
 
 	std::shared_ptr<Intro> intro = std::make_shared<Intro>(stateManager);
 	std::shared_ptr<Title> title = std::make_shared<Title>(stateManager);

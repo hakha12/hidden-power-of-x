@@ -7,8 +7,8 @@
 #define BACKGROUND_SPEED -5
 
 
-#define PLAYER_STARTING_POS_X 1920/4
-#define PLAYER_STARTING_POS_Y 1080/2
+#define PLAYER_STARTING_POS_X stateManager->GetSharedContext()->window->GetInternalSize().x/4
+#define PLAYER_STARTING_POS_Y stateManager->GetSharedContext()->window->GetInternalSize().y/2
 #define PLAYER_SIZE 100
 #define PLAYER_COLLISION_SIZE 100
 #define PLAYER_COLOR BLACK
@@ -69,8 +69,8 @@ void Level::Update(){
 	
 
 	CheckPlayerCollision();
-
 	MovePlayer();
+	BoundCheck();
 	
 	if (bgTimer == 0){
 		SpawnBackground();
@@ -85,7 +85,7 @@ void Level::Update(){
 	MoveBackground(BACKGROUND_SPEED);
 
 	if (topBarRec.rec.height >= 0) topBarRec.rec.height -= 2;
-	if (botBarRec.rec.y <= 1080) botBarRec.rec.y += 2;
+	if (botBarRec.rec.y <= stateManager->GetSharedContext()->window->GetInternalSize().y) botBarRec.rec.y += 2;
 
 	bgTimer--;
 	enemyTimer--;
@@ -95,8 +95,8 @@ void Level::Render(){
 	for (auto i: backgrounds) DrawRectangleRec(i.rec, i.color);
 
 	if (isGameOver){
-		DrawText("GAME OVER", 1920/6, 475, 100, BLACK);
-		DrawText("Press ENTER to try again, or BACKSPACE to return", 1920/6, 600, 25, BLACK);
+		DrawText("GAME OVER", stateManager->GetSharedContext()->window->GetInternalSize().x/6, 475, 100, BLACK);
+		DrawText("Press ENTER to try again, or BACKSPACE to return", stateManager->GetSharedContext()->window->GetInternalSize().x/6, 600, 25, BLACK);
 
 		return;
 	} 
@@ -108,7 +108,8 @@ void Level::Render(){
 	DrawRectangleRec(topBarRec.rec, BLACK);
 	DrawRectangleRec(botBarRec.rec, BLACK);
 
-	DrawText("ARROW KEYS: Move			P: Pause", 50, 50, 50, BLACK);
+	DrawText("ARROW KEYS: Move			P: Pause", 50, 150, 50, BLACK);
+	DrawText(TextFormat("SCORE: %03i", playerScore), 50, 50, 100, BLACK);
 }
 
 void Level::ResetPlayer(){
@@ -118,15 +119,16 @@ void Level::ResetPlayer(){
 	player->AddCollisionFromCenter(0, 0, PLAYER_COLLISION_SIZE);
 
 	playerHP = PLAYER_HP;
+	playerScore = 0;
 }
 
 void Level::MovePlayer(){
 	player->Update(Vector2Zero());
 
 	if (IsKeyDown(KEY_UP) && player->GetPosition().y >= 0) player->Update(PLAYER_MOVE_UP);
-	if (IsKeyDown(KEY_DOWN) && player->GetPosition().y <= 1080) player->Update(PLAYER_MOVE_DOWN);
+	if (IsKeyDown(KEY_DOWN) && player->GetPosition().y <= stateManager->GetSharedContext()->window->GetInternalSize().y) player->Update(PLAYER_MOVE_DOWN);
 	if (IsKeyDown(KEY_LEFT) && player->GetPosition().x >= 0) player->Update(PLAYER_MOVE_LEFT);
-	if (IsKeyDown(KEY_RIGHT) && player->GetPosition().x <= 1920) player->Update(PLAYER_MOVE_RIGHT);
+	if (IsKeyDown(KEY_RIGHT) && player->GetPosition().x <= stateManager->GetSharedContext()->window->GetInternalSize().x) player->Update(PLAYER_MOVE_RIGHT);
 }
 
 void Level::CheckPlayerCollision(){
@@ -147,8 +149,13 @@ void Level::BoundCheck(){
 	Background frontBG = backgrounds.front();
 	std::shared_ptr<Entity> frontEnemy = enemyList.front();
 
+	if (!frontEnemy) return;
+
 	if (frontBG.rec.x + frontBG.rec.width < 0) backgrounds.pop_front();
-	if (frontEnemy->GetPosition().x + ENEMY_COLLISION_SIZE < 0) enemyList.pop_front();
+	if (frontEnemy->GetPosition().x + ENEMY_COLLISION_SIZE < 0) {
+		enemyList.pop_front();
+		playerScore++;
+	}
 }
 
 void Level::SpawnEnemy(){
@@ -179,8 +186,8 @@ void Level::MoveBackground(int speed){
 }
 
 void Level::ResetIntroBar(){
-	topBarRec.rec = (Rectangle){0, 0, 1920, 1080/4};
-	botBarRec.rec = (Rectangle){0, 1080*3/4, 1920, 1080/4};
+	topBarRec.rec = (Rectangle){0, 0, stateManager->GetSharedContext()->window->GetInternalSize().x, stateManager->GetSharedContext()->window->GetInternalSize().y/4};
+	botBarRec.rec = (Rectangle){0, stateManager->GetSharedContext()->window->GetInternalSize().y*3/4, stateManager->GetSharedContext()->window->GetInternalSize().x, stateManager->GetSharedContext()->window->GetInternalSize().y/4};
 	
 }
 

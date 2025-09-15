@@ -1,7 +1,7 @@
 #include "stateManager.hpp"
 
-StateManager::StateManager(){
-
+StateManager::StateManager(std::shared_ptr<SharedContext> shared){
+	sharedContext = shared;
 }
 
 void StateManager::Update(){
@@ -25,6 +25,10 @@ void StateManager::SwitchTo(const StateType& type){
 
 	currentState = it->second;
 	currentState->Awake();
+}
+
+std::shared_ptr<SharedContext> StateManager::GetSharedContext(){
+	return sharedContext;
 }
 
 void StateManager::Add(const StateType& type, std::shared_ptr<State> state){

@@ -39,6 +39,7 @@ class Level : public State {
 		Background botBarRec;
 
 		int playerHP;
+		int playerScore;
 
 		bool isPaused;
 		bool isGameOver;

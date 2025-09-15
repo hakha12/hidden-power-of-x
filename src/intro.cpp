@@ -1,8 +1,8 @@
 #include "intro.hpp"
 
 void Intro::Init(){
-	logoPosition.x = 1920/2 - 128;
-	logoPosition.y = 1080/2 - 128;
+	logoPosition.x = stateManager->GetSharedContext()->window->GetInternalSize().x/2 - 128;
+	logoPosition.y = stateManager->GetSharedContext()->window->GetInternalSize().y/2 - 128;
 
 	Reset();
 }
@@ -95,7 +95,7 @@ void Intro::Render(){
 
                 //DrawRectangle(GetScreenWidth()/2 - 112, GetScreenHeight()/2 - 112, 224, 224, Fade(RAYWHITE, alpha));
 
-                DrawText(TextSubtext("raylib", 0, letterCount), 1920/2 - 44, 1080/2 + 48, 50, Fade(BLACK, alpha));
+                DrawText(TextSubtext("raylib", 0, letterCount), stateManager->GetSharedContext()->window->GetInternalSize().x/2 - 44, stateManager->GetSharedContext()->window->GetInternalSize().y/2 + 48, 50, Fade(BLACK, alpha));
             }
             else if (state == 4)
             {
