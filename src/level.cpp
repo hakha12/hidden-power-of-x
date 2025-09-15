@@ -28,8 +28,8 @@
 #define ENEMY_COLLISION_COLOR ORANGE
 
 #define TYPE_ONE_COLLISION_DISTANCE -500
-#define TYPE_TWO_COLLISION_DISTANCE 250
-#define TYPE_THREE_COLLISION_DISTANCE -300
+#define TYPE_TWO_COLLISION_DISTANCE 350
+#define TYPE_THREE_COLLISION_DISTANCE -400
 
 static std::shared_ptr<Entity> CreateTypeOneEnemy();
 static std::shared_ptr<Entity> CreateTypeTwoEnemy();
@@ -41,6 +41,10 @@ void Level::Init(){
 
 	isPaused = false;
 	isGameOver = false;
+
+	stateManager->GetSharedContext()->audio->Add("scoreTick", "270342__littlerobotsoundfactory__pickup_03.wav");
+	stateManager->GetSharedContext()->audio->Add("playerHit", "270344__littlerobotsoundfactory__shoot_00.wav");
+	stateManager->GetSharedContext()->audio->Add("movement", "270315__littlerobotsoundfactory__menu_navigate_03.wav");
 }
 
 void Level::Awake(){
@@ -125,6 +129,10 @@ void Level::ResetPlayer(){
 void Level::MovePlayer(){
 	player->Update(Vector2Zero());
 
+	if (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_LEFT) || IsKeyPressed(KEY_RIGHT)){
+		stateManager->GetSharedContext()->audio->Play("movement");
+	}
+
 	if (IsKeyDown(KEY_UP) && player->GetPosition().y >= 0) player->Update(PLAYER_MOVE_UP);
 	if (IsKeyDown(KEY_DOWN) && player->GetPosition().y <= stateManager->GetSharedContext()->window->GetInternalSize().y) player->Update(PLAYER_MOVE_DOWN);
 	if (IsKeyDown(KEY_LEFT) && player->GetPosition().x >= 0) player->Update(PLAYER_MOVE_LEFT);
@@ -135,6 +143,7 @@ void Level::CheckPlayerCollision(){
 	for (auto i: enemyList){
 		if (Entity::CheckCollision(player, i)){
 			i->ToggleCollisionVisibility();
+			stateManager->GetSharedContext()->audio->Play("playerHit");
 			playerHP--;
 		}
 	}
@@ -154,6 +163,7 @@ void Level::BoundCheck(){
 	if (frontBG.rec.x + frontBG.rec.width < 0) backgrounds.pop_front();
 	if (frontEnemy->GetPosition().x + ENEMY_COLLISION_SIZE < 0) {
 		enemyList.pop_front();
+		stateManager->GetSharedContext()->audio->Play("scoreTick");
 		playerScore++;
 	}
 }

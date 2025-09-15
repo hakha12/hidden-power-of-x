@@ -1,5 +1,3 @@
-#include "window.hpp"
-#include "entity.hpp"
 #include "stateManager.hpp"
 #include "intro.hpp"
 #include "title.hpp"
@@ -15,15 +13,15 @@
 #define GAME_TITLE "Hidden Power of X"
 #define TARGET_FPS 60
 
-std::shared_ptr<Window> window;
 std::shared_ptr<StateManager> stateManager;
 
 static void UpdateDrawFrame();
 
 int main(int argc, char** argv){
-    window = std::make_shared<Window>(WINDOW_WIDTH, WINDOW_HEIGHT, GAME_TITLE);
+    std::shared_ptr<Window> window = std::make_shared<Window>(WINDOW_WIDTH, WINDOW_HEIGHT, GAME_TITLE);
+	std::shared_ptr<Audio> audio = std::make_shared<Audio>();
 
-	std::shared_ptr<SharedContext> sharedContext = std::make_shared<SharedContext>(window);
+	std::shared_ptr<SharedContext> sharedContext = std::make_shared<SharedContext>(window, audio);
 	stateManager = std::make_shared<StateManager>(sharedContext);
 
 	std::shared_ptr<Intro> intro = std::make_shared<Intro>(stateManager);
@@ -49,7 +47,7 @@ int main(int argc, char** argv){
 static void UpdateDrawFrame(){
 	stateManager->Update();
 
-	window->PrepareRender(RAYWHITE);
+	stateManager->GetSharedContext()->window->PrepareRender(RAYWHITE);
 	stateManager->Render();
-	window->StartRender();
+	stateManager->GetSharedContext()->window->StartRender();
 }
