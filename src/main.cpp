@@ -1,6 +1,7 @@
 #include "stateManager.hpp"
 #include "intro.hpp"
 #include "title.hpp"
+#include "tutorial.hpp"
 #include "level.hpp"
 #include "shared.hpp"
 
@@ -26,9 +27,11 @@ int main(int argc, char** argv){
 
 	std::shared_ptr<Intro> intro = std::make_shared<Intro>(stateManager);
 	std::shared_ptr<Title> title = std::make_shared<Title>(stateManager);
+	std::shared_ptr<Tutorial> tutorial = std::make_shared<Tutorial>(stateManager);
 	std::shared_ptr<Level> level = std::make_shared<Level>(stateManager);
 	stateManager->Add(StateType::INTRO, intro);
 	stateManager->Add(StateType::TITLE, title);
+	stateManager->Add(StateType::TUTORIAL, tutorial);
 	stateManager->Add(StateType::LEVEL, level);
 
 	stateManager->SwitchTo(StateType::INTRO);

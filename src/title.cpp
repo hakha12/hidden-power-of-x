@@ -25,8 +25,10 @@ void Title::Update(){
 
 	if (transitionAlpha > 0.0f) transitionAlpha -= 0.01f;
 
-	if (IsKeyPressed(KEY_ENTER)) stateManager->SwitchTo(StateType::LEVEL);
-
+	if (IsKeyPressed(KEY_ENTER)) {
+		stateManager->GetSharedContext()->audio->Init();
+		stateManager->SwitchTo(StateType::TUTORIAL);
+	}
 
 }
 

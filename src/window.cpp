@@ -32,7 +32,10 @@ void Window::StartRender(){
 }
 
 Vector2 Window::GetInternalSize(){
-	return (Vector2){internalWidth, internalHeight};
+	Vector2 internal;
+	internal.x = internalWidth;
+	internal.y = internalHeight;
+	return internal;
 }
 
 void Window::UpdateScaling(){

@@ -1,8 +1,5 @@
 #include "audio.hpp"
 
-Audio::Audio(){
-	Init();
-}
 
 Audio::~Audio(){
 	for (auto i: sounds){
@@ -34,5 +31,9 @@ void Audio::Play(const std::string& name){
 }
 
 void Audio::Init(){
+	if (isAudioOn) return;
+
 	InitAudioDevice();
+
+	isAudioOn = true;
 }

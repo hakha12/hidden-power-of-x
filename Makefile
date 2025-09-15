@@ -40,6 +40,7 @@ PROJECT_SOURCE_FILES  ?= \
 	$(PROJECT_SOURCE_PATH)/entity.cpp \
 	$(PROJECT_SOURCE_PATH)/intro.cpp \
 	$(PROJECT_SOURCE_PATH)/title.cpp \
+	$(PROJECT_SOURCE_PATH)/tutorial.cpp \
 	$(PROJECT_SOURCE_PATH)/level.cpp \
 	$(PROJECT_SOURCE_PATH)/audio.cpp
 
@@ -48,7 +49,7 @@ PROJECT_OBJECT_FILE    = $(patsubst $(PROJECT_SOURCE_PATH)/%.cpp, $(PROJECT_OBJE
 						 $(patsubst $(PROJECT_SCENE_PATH)/%.cpp, $(PROJECT_OBJECT_PATH)/%.o, $(PROJECT_SCENE_FILES))
 
 # raylib library variables
-RAYLIB_SRC_PATH       ?= ../../raylib/src
+RAYLIB_SRC_PATH       ?= ../raylib/src
 RAYLIB_INCLUDE_PATH   ?= $(RAYLIB_SRC_PATH)
 RAYLIB_LIB_PATH       ?= $(RAYLIB_SRC_PATH)
 
@@ -152,7 +153,7 @@ endif
 #  -Wno-unused-value    ignore unused return values of some functions (i.e. fread())
 #  -D_DEFAULT_SOURCE    use with -std=c99 on Linux and PLATFORM_WEB, required for timespec
 CFLAGS = -std=c++11 -Wall -Wno-missing-braces -Wno-unused-value -D_DEFAULT_SOURCE $(PROJECT_CUSTOM_FLAGS)
-#CFLAGS += -Wextra -Wmissing-prototypes -Wstrict-prototypes
+CFLAGS +=  -Wno-narrowing #-Wextra -Wmissing-prototypes -Wstrict-prototypes
 
 ifeq ($(BUILD_MODE),DEBUG)
     CFLAGS += -g -D_DEBUG

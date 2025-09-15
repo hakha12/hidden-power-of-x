@@ -35,6 +35,8 @@ static std::shared_ptr<Entity> CreateTypeOneEnemy();
 static std::shared_ptr<Entity> CreateTypeTwoEnemy();
 static std::shared_ptr<Entity> CreateTypeThreeEnemy();
 
+static bool isAudioLoaded;
+
 void Level::Init(){
 	ResetPlayer();
 	ResetIntroBar();
@@ -42,9 +44,8 @@ void Level::Init(){
 	isPaused = false;
 	isGameOver = false;
 
-	stateManager->GetSharedContext()->audio->Add("scoreTick", "270342__littlerobotsoundfactory__pickup_03.wav");
-	stateManager->GetSharedContext()->audio->Add("playerHit", "270344__littlerobotsoundfactory__shoot_00.wav");
-	stateManager->GetSharedContext()->audio->Add("movement", "270315__littlerobotsoundfactory__menu_navigate_03.wav");
+	isAudioLoaded = false;
+	
 }
 
 void Level::Awake(){
@@ -56,6 +57,20 @@ void Level::Awake(){
 
 	isPaused = false;
 	isGameOver = false;
+
+	if (isAudioLoaded) return;
+
+	isAudioLoaded = true;
+
+	#if defined(PLATFORM_WEB)
+		stateManager->GetSharedContext()->audio->Add("scoreTick", "270342__littlerobotsoundfactory__pickup_03.ogg");
+		stateManager->GetSharedContext()->audio->Add("playerHit", "270344__littlerobotsoundfactory__shoot_00.ogg");
+		stateManager->GetSharedContext()->audio->Add("movement", "270315__littlerobotsoundfactory__menu_navigate_03.ogg");
+	#else
+		stateManager->GetSharedContext()->audio->Add("scoreTick", "270342__littlerobotsoundfactory__pickup_03.wav");
+		stateManager->GetSharedContext()->audio->Add("playerHit", "270344__littlerobotsoundfactory__shoot_00.wav");
+		stateManager->GetSharedContext()->audio->Add("movement", "270315__littlerobotsoundfactory__menu_navigate_03.wav");
+	#endif
 
 }
 
